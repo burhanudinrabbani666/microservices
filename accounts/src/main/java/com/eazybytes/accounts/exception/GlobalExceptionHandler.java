@@ -14,7 +14,12 @@ import com.eazybytes.accounts.dto.ErrorResponseDto;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    // Pass Exception name.
+    /**
+     * @exception CustomerAlreadyExistsException
+     * @param ex
+     * @param webRequest
+     * @return
+     */
     @ExceptionHandler(CustomerAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDto> handleCustomerAlreadyExistsException(CustomerAlreadyExistsException ex,
             WebRequest webRequest) {
@@ -28,6 +33,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.CONFLICT);
     }
 
+    /**
+     * @exception ResourceNotFoundException
+     * @param ex
+     * @param webRequest
+     * @return
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException ex,
             WebRequest webRequest) {
