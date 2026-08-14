@@ -52,4 +52,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * @exception Exception
+     * @param ex
+     * @param webRequest
+     * @return
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponseDto> handleGlobalException(Exception ex, WebRequest webRequest) {
+        ErrorResponseDto errorResponseDTO = new ErrorResponseDto();
+
+        errorResponseDTO.setApiPath(webRequest.getDescription(false));
+        errorResponseDTO.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR);
+        errorResponseDTO.setErrorMessage(ex.getMessage());
+        errorResponseDTO.setErrorTime(LocalDateTime.now());
+
+        return new ResponseEntity<>(errorResponseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

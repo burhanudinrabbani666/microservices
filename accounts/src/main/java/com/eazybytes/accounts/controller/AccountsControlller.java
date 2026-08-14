@@ -50,6 +50,7 @@ public class AccountsControlller {
     @GetMapping("/fetch")
     public ResponseEntity<CustomerDto> fetchAccountDetails(@RequestParam String mobileNumber) {
         CustomerDto customerDto = this.accountsService.fetchAccount(mobileNumber);
+
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
 
