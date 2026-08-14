@@ -1,6 +1,5 @@
 package com.eazybytes.accounts.service.impl;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -32,8 +31,8 @@ public class AccountsServiceImpl implements IAccountsService {
     public void createAccount(CustomerDto customerDto) {
         Optional<Customer> existCustomer = this.customerRepository.findByMobileNumber(customerDto.getMobileNumber());
         if (existCustomer.isPresent()) {
-            throw new CustomerAlreadyExistsException(CustomerConstant.MOBILE_NUMBER_ALREADY_EXIST
-                    + customerDto.getMobileNumber());
+            throw new CustomerAlreadyExistsException(
+                    CustomerConstant.MOBILE_NUMBER_ALREADY_EXIST + customerDto.getMobileNumber());
         }
 
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
@@ -57,8 +56,8 @@ public class AccountsServiceImpl implements IAccountsService {
                         customer.getCustomerId().toString()));
 
         CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
-
         customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
+
         return customerDto;
     }
 
