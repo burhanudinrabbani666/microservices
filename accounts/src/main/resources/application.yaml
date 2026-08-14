@@ -21,3 +21,8 @@ spring:
 # SERVER configuration
 server:
     port: 8080
+
+# =============================================
+# SCALAR configuration
+scalar:
+    path: /docs

@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.eazybytes.accounts.constants.AccountsConstants;
-import com.eazybytes.accounts.constants.CustomerConstant;
 import com.eazybytes.accounts.dto.AccountsDto;
 import com.eazybytes.accounts.dto.CustomerDto;
 import com.eazybytes.accounts.entity.Accounts;
@@ -27,33 +26,28 @@ public class AccountsServiceImpl implements IAccountsService {
     private final AccountsRepository accountsRepository;
     private final CustomerRepository customerRepository;
 
+    private final String MOBILE_NUMBER_FIELD = "mobileNumber";
+    private final String CUSTOMER_ID_FIELD = "customerId";
+    private final String ACCOUNT_NUMBER_FIELD = "accountNumber";
+
     @Override
     public void createAccount(CustomerDto customerDto) {
-        Optional<Customer> existCustomer = this.customerRepository.findByMobileNumber(customerDto.getMobileNumber());
-        if (existCustomer.isPresent()) {
-            throw new CustomerAlreadyExistsException(
-                    CustomerConstant.MOBILE_NUMBER_ALREADY_EXIST + customerDto.getMobileNumber());
-        }
+        Optional<Customer> optionalCustomer = this.customerRepository.findByMobileNumber(customerDto.getMobileNumber());
+        this.checkCustomerAlreadyExist(optionalCustomer);
 
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
         Customer savedCustomer = this.customerRepository.save(customer);
-
         this.accountsRepository.save(this.createNewAccount(savedCustomer));
     }
 
     @Override
     public CustomerDto fetchAccount(String mobileNumber) {
-        Customer customer = this.customerRepository.findByMobileNumber(mobileNumber)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Customer",
-                        "mobileNumber",
-                        mobileNumber));
+        Optional<Customer> optionalCustomer = this.customerRepository.findByMobileNumber(mobileNumber);
+        Customer customer = this.checkCustomerIsPresent(optionalCustomer, MOBILE_NUMBER_FIELD, mobileNumber);
 
-        Accounts accounts = this.accountsRepository.findByCustomerId(customer.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Accounts",
-                        "customerId",
-                        customer.getCustomerId().toString()));
+        Optional<Accounts> optionalAccounts = this.accountsRepository.findByCustomerId(customer.getCustomerId());
+        String customerIdAString = String.valueOf(customer.getCustomerId());
+        Accounts accounts = this.checkAccountIsPresent(optionalAccounts, CUSTOMER_ID_FIELD, customerIdAString);
 
         CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
         customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
@@ -66,23 +60,19 @@ public class AccountsServiceImpl implements IAccountsService {
         boolean isUpdated = false;
         AccountsDto accountsDto = customerDto.getAccountsDto();
         if (accountsDto != null) {
-            Accounts accounts = this.accountsRepository
-                    .findById(accountsDto.getAccountNumber())
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Account",
-                            "AccountNumber",
-                            accountsDto.getAccountNumber().toString()));
+            /// Update Account Logic
+            Optional<Accounts> optionalAccounts = this.accountsRepository.findById(accountsDto.getAccountNumber());
+            String accountNumberString = String.valueOf(accountsDto.getAccountNumber());
+            Accounts accounts = this.checkAccountIsPresent(optionalAccounts, ACCOUNT_NUMBER_FIELD, accountNumberString);
 
             AccountsMapper.mapToAccounts(accountsDto, accounts);
             accounts = this.accountsRepository.save(accounts);
 
+            /// Update Customer Logic
             Long customerId = accounts.getCustomerId();
-            Customer customer = this.customerRepository
-                    .findById(customerId)
-                    .orElseThrow(() -> new ResourceNotFoundException(
-                            "Customer",
-                            "customerId",
-                            customerId.toString()));
+            Optional<Customer> optionalCustomer = this.customerRepository.findById(customerId);
+            Customer customer = this.checkCustomerIsPresent(optionalCustomer, CUSTOMER_ID_FIELD,
+                    String.valueOf(customerId));
 
             CustomerMapper.mapToCustomer(customerDto, customer);
             this.customerRepository.save(customer);
@@ -112,17 +102,27 @@ public class AccountsServiceImpl implements IAccountsService {
 
     @Override
     public boolean deleteAccount(String mobileNumber) {
-        Customer customer = this.customerRepository
-                .findByMobileNumber(mobileNumber)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Customer",
-                        "mobileNumber",
-                        mobileNumber));
+        Optional<Customer> optionalCustomer = this.customerRepository.findByMobileNumber(mobileNumber);
+        Customer customer = this.checkCustomerIsPresent(optionalCustomer, MOBILE_NUMBER_FIELD, mobileNumber);
 
         this.accountsRepository.deleteByCustomerId(customer.getCustomerId());
         this.customerRepository.deleteById(customer.getCustomerId());
 
         return true;
+    }
+
+    private Customer checkCustomerIsPresent(Optional<Customer> customer, String fieldName, String fieldValue) {
+        return customer.orElseThrow(() -> new ResourceNotFoundException("Customer", fieldName, fieldValue));
+    }
+
+    private Accounts checkAccountIsPresent(Optional<Accounts> account, String fieldName, String fieldValue) {
+        return account.orElseThrow(() -> new ResourceNotFoundException("Account", fieldName, fieldValue));
+    }
+
+    private void checkCustomerAlreadyExist(Optional<Customer> customer) {
+        if (customer.isPresent()) {
+            throw new CustomerAlreadyExistsException("Customer Already Exist");
+        }
     }
 
 }

@@ -72,8 +72,8 @@ public class AccountsControlller {
     @GetMapping
     public ResponseEntity<CustomerDto> fetchAccountDetails(
             @RequestParam @Valid @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits") @Schema(example = "0812345678") String mobileNumber) {
-        CustomerDto customerDto = this.accountsService.fetchAccount(mobileNumber);
 
+        CustomerDto customerDto = this.accountsService.fetchAccount(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
 
@@ -92,8 +92,8 @@ public class AccountsControlller {
     public ResponseEntity<ResponseDto> updateAccountDetails(@RequestBody @Valid CustomerDto customerDto) {
         boolean isUpdated = this.accountsService.updatedAccount(customerDto);
         HttpStatus httpStatusCode = isUpdated ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR;
-        ResponseDto responseDto = new ResponseDto();
 
+        ResponseDto responseDto = new ResponseDto();
         responseDto.setStatusCode(isUpdated ? AccountsConstants.STATUS_200 : AccountsConstants.STATUS_500);
         responseDto.setStatusMessage(isUpdated ? AccountsConstants.MESSAGE_200 : AccountsConstants.MESSAGE_500);
 
@@ -114,10 +114,11 @@ public class AccountsControlller {
     @DeleteMapping
     public ResponseEntity<ResponseDto> deleteAccountDetails(
             @RequestParam @Valid @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits") @Schema(example = "0812345678") String mobileNumber) {
+
         boolean isDeleted = this.accountsService.deleteAccount(mobileNumber);
         HttpStatus httpStatusCode = isDeleted ? HttpStatus.OK : HttpStatus.EXPECTATION_FAILED;
-        ResponseDto responseDto = new ResponseDto();
 
+        ResponseDto responseDto = new ResponseDto();
         responseDto.setStatusCode(isDeleted ? AccountsConstants.STATUS_200 : AccountsConstants.STATUS_417);
         responseDto.setStatusMessage(isDeleted ? AccountsConstants.MESSAGE_200 : AccountsConstants.MESSAGE_417_DELETE);
 
