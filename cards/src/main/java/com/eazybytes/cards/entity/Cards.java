@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class Card {
+public class Cards {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Card {
     private String mobileNumber;
     private String cardNumber;
     private String cardType;
-    private Long totalLimit;
-    private Long amountUsed;
-    private Long avaibleAmount;
+    private int totalLimit;
+    private int amountUsed;
+    private int availableAmount;
 }

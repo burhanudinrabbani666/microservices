@@ -13,18 +13,18 @@ public class CardDto {
     private String mobileNumber;
 
     @NotEmpty(message = "cardNumber cannot be empty or null")
-    @Pattern(regexp = "(^$|[0-9]{12})", message = "Card number must be 12 digits")
+    @Pattern(regexp = "(^$|[0-9]{12})", message = "Cards number must be 12 digits")
     private String cardNumber;
 
     @NotEmpty(message = "cardType cannot be empty or null")
     private String cardType;
 
     @Positive(message = "totalLimit should be higher than zero")
-    private Long totalLimit;
+    private int totalLimit;
 
     @PositiveOrZero(message = "amountUsed should be higher or equal than zero")
-    private Long amountUsed;
+    private int amountUsed;
 
     @PositiveOrZero(message = "Total avaibleAmount should be higher or equal than zero")
-    private Long avaibleAmount;
+    private int availableAmount;
 }

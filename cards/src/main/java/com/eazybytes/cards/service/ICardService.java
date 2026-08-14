@@ -1,7 +1,7 @@
 package com.eazybytes.cards.service;
 
 import com.eazybytes.cards.dto.CardDto;
-import com.eazybytes.cards.entity.Card;
+import com.eazybytes.cards.entity.Cards;
 
 public interface ICardService {
     /**
@@ -9,13 +9,13 @@ public interface ICardService {
      * @param mobileNumber
      * @return
      */
-    Card getCard(String mobileNumber);
+    CardDto getCard(String mobileNumber);
 
     /**
      * @param cardDto
      * @return
      */
-    Card createCard(CardDto cardDto);
+    CardDto createCard(String mobileNumber);
 
     /**
      * 
@@ -30,4 +30,5 @@ public interface ICardService {
      * @return
      */
     boolean deleteCard(String mobileNumber);
+
 }

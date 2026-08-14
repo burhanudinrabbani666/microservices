@@ -4,17 +4,17 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.eazybytes.cards.entity.Card;
+import com.eazybytes.cards.entity.Cards;
 
 /**
  * CardRepository
  */
-public interface CardRepository extends JpaRepository<Card, Long> {
+public interface CardRepository extends JpaRepository<Cards, Long> {
 
     /**
      * 
      * @param mobileNumber
      * @return
      */
-    Optional<Card> findByMobileNumber(String mobileNumber);
+    Optional<Cards> findByMobileNumber(String mobileNumber);
 }
