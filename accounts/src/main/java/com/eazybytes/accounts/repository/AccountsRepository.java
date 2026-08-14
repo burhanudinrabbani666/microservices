@@ -13,8 +13,17 @@ import jakarta.transaction.Transactional;
 @Repository
 public interface AccountsRepository extends JpaRepository<Accounts, Long> {
 
+    /**
+     * 
+     * @param customerId
+     * @return
+     */
     Optional<Accounts> findByCustomerId(Long customerId);
 
+    /**
+     * 
+     * @param customerId
+     */
     @Transactional
     @Modifying
     void deleteByCustomerId(Long customerId);
