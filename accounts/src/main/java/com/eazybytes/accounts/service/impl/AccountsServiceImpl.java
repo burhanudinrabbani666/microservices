@@ -37,10 +37,8 @@ public class AccountsServiceImpl implements IAccountsService {
         }
 
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
-        customer.setCreatedAt(LocalDateTime.now());
-        customer.setCreatedBy("annonymous");
-
         Customer savedCustomer = this.customerRepository.save(customer);
+
         this.accountsRepository.save(this.createNewAccount(savedCustomer));
     }
 
@@ -59,6 +57,7 @@ public class AccountsServiceImpl implements IAccountsService {
                         customer.getCustomerId().toString()));
 
         CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
+
         customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
         return customerDto;
     }
@@ -108,8 +107,6 @@ public class AccountsServiceImpl implements IAccountsService {
         newAccount.setAccountNumber(randomAccNumber);
         newAccount.setAccountType(AccountsConstants.SAVINGS);
         newAccount.setBranchAddress(AccountsConstants.ADDRESS);
-        newAccount.setCreatedAt(LocalDateTime.now());
-        newAccount.setCreatedBy("annonymous");
 
         return newAccount;
     }
