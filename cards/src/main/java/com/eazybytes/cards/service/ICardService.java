@@ -1,34 +1,35 @@
 package com.eazybytes.cards.service;
 
 import com.eazybytes.cards.dto.CardDto;
+import com.eazybytes.cards.dto.CreateCardDto;
 import com.eazybytes.cards.entity.Cards;
 
 public interface ICardService {
-    /**
-     * 
-     * @param mobileNumber
-     * @return
-     */
-    CardDto getCard(String mobileNumber);
+        /**
+         * 
+         * @param mobileNumber
+         * @return
+         */
+        Cards getCardByMobileNumber(String mobileNumber);
 
-    /**
-     * @param cardDto
-     * @return
-     */
-    CardDto createCard(String mobileNumber);
+        /**
+         * @param cardDto
+         * @return
+         */
+        Cards createCard(CreateCardDto createCardDto);
 
-    /**
-     * 
-     * @param cardDto
-     * @return
-     */
-    void updateCard(CardDto cardDto);
+        /**
+         * 
+         * @param cardDto
+         * @return
+         */
+        void updateCard(CardDto cardDto);
 
-    /**
-     * 
-     * @param mobileNumber
-     * @return
-     */
-    void deleteCard(String mobileNumber);
+        /**
+         * 
+         * @param mobileNumber
+         * @return
+         */
+        void deleteCardByMobileNumber(String mobileNumber);
 
 }
