@@ -64,8 +64,7 @@ public class CardController {
         }
 
         @PutMapping(path = "/{id}")
-        @Valid
-        public ResponseEntity<String> updatedCard(@PathVariable Long id, @RequestBody CardDto cardDto) {
+        public ResponseEntity<String> updatedCard(@PathVariable @Valid Long id, @RequestBody @Valid CardDto cardDto) {
                 this.cardService.updateCard(id, cardDto);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Card successfully updated");
         }
