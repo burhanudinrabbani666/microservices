@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eazybytes.cards.dto.CardDto;
@@ -62,6 +61,13 @@ public class CardController {
                 response.setCard(card);
 
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }
+
+        @PutMapping(path = "/{id}")
+        @Valid
+        public ResponseEntity<String> updatedCard(@PathVariable Long id, @RequestBody CardDto cardDto) {
+                this.cardService.updateCard(id, cardDto);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Card successfully updated");
         }
 
         /**

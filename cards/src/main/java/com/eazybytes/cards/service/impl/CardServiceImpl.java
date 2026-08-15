@@ -24,6 +24,7 @@ public class CardServiceImpl implements ICardService {
         private final CardRepository cardRepository;
 
         private final String MOBILE_NUMBER_FIELD = "mobileNumber";
+        private final String CARD_ID_FIELD = "id";
 
         @Override
         public Cards getCardByMobileNumber(String mobileNumber) {
@@ -42,9 +43,9 @@ public class CardServiceImpl implements ICardService {
         }
 
         @Override
-        public void updateCard(CardDto cardDto) {
-                Optional<Cards> optionalCard = this.cardRepository.findByMobileNumber(cardDto.getMobileNumber());
-                Cards card = this.checkIsCardPresent(optionalCard, MOBILE_NUMBER_FIELD, cardDto.getMobileNumber());
+        public void updateCard(Long id, CardDto cardDto) {
+                Optional<Cards> optionalCard = this.cardRepository.findById(id);
+                Cards card = this.checkIsCardPresent(optionalCard, CARD_ID_FIELD, String.valueOf(id));
 
                 CardMapper.cardDtoToCard(card, cardDto);
                 this.cardRepository.save(card);

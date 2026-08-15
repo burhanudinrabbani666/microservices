@@ -23,7 +23,7 @@ public interface ICardService {
          * @param cardDto
          * @return
          */
-        void updateCard(CardDto cardDto);
+        void updateCard(Long id, CardDto cardDto);
 
         /**
          * 
