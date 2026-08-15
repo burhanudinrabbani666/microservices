@@ -12,4 +12,13 @@ public class CardMapper {
         cardDto.setAmountUsed(card.getAmountUsed());
         cardDto.setTotalLimit(card.getTotalLimit());
     }
+
+    public static void cardDtoToCard(Cards cards, CardDto cardDto) {
+        cards.setCardNumber(cardDto.getCardNumber());
+        cards.setCardType(cardDto.getCardType());
+        cards.setMobileNumber(cardDto.getMobileNumber());
+        cards.setTotalLimit(cardDto.getTotalLimit());
+        cards.setAvailableAmount(cardDto.getAvailableAmount());
+        cards.setAmountUsed(cardDto.getAmountUsed());
+    }
 }

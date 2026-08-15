@@ -22,13 +22,13 @@ public interface ICardService {
      * @param cardDto
      * @return
      */
-    boolean updateCard(CardDto cardDto);
+    void updateCard(CardDto cardDto);
 
     /**
      * 
      * @param mobileNumber
      * @return
      */
-    boolean deleteCard(String mobileNumber);
+    void deleteCard(String mobileNumber);
 
 }
