@@ -19,6 +19,7 @@ import com.eazybytes.cards.entity.Cards;
 import com.eazybytes.cards.service.ICardService;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 
 @RestController()
@@ -35,11 +36,12 @@ public class CardController {
          * @return
          */
         @GetMapping(path = "/{mobileNumber}")
-        public ResponseEntity<CardSuccessResponseDto> getCardByMobileNumber(@PathVariable String mobileNumber) {
+        public ResponseEntity<CardSuccessResponseDto> getCardByMobileNumber(
+                        @PathVariable @Valid @Pattern(regexp = "(^$|[0-9]{10})", message = "Account number must be 10 digits") String mobileNumber) {
                 Cards card = this.cardService.getCardByMobileNumber(mobileNumber);
                 CardSuccessResponseDto response = new CardSuccessResponseDto();
 
-                response.setStatusCode(HttpStatus.OK.toString());
+                response.setStatusCode(String.valueOf(HttpStatus.OK.value()));
                 response.setStatusMessage("Success get Card Details");
                 response.setCard(card);
 
@@ -56,7 +58,7 @@ public class CardController {
                 Cards card = this.cardService.createCard(createCardDto);
                 CardSuccessResponseDto response = new CardSuccessResponseDto();
 
-                response.setStatusCode(HttpStatus.CREATED.toString());
+                response.setStatusCode(String.valueOf(HttpStatus.CREATED.value()));
                 response.setStatusMessage("Success create Card Details");
                 response.setCard(card);
 
