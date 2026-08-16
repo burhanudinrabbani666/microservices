@@ -44,6 +44,9 @@ public class CardServiceImpl implements ICardService {
 
         @Override
         public void updateCard(Long id, CardDto cardDto) {
+                Optional<Cards> existMobileNumber = this.cardRepository.findByMobileNumber(cardDto.getMobileNumber());
+                this.checkIsCardAlreadyExist(existMobileNumber);
+
                 Optional<Cards> optionalCard = this.cardRepository.findById(id);
                 Cards card = this.checkIsCardPresent(optionalCard, CARD_ID_FIELD, String.valueOf(id));
 
@@ -60,7 +63,7 @@ public class CardServiceImpl implements ICardService {
         }
 
         /**
-         * 
+         * @throws ResourceNotFoundException
          * @param optionalCard
          * @return
          */

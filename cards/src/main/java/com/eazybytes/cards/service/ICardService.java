@@ -7,14 +7,14 @@ import com.eazybytes.cards.entity.Cards;
 public interface ICardService {
         /**
          * 
-         * @param mobileNumber
-         * @return
+         * @param mobileNumber the unique identifier of the card
+         * @return card details of given mobileNumber
          */
         Cards getCardByMobileNumber(String mobileNumber);
 
         /**
          * @param cardDto
-         * @return
+         * @return card details of successful creating card process
          */
         Cards createCard(CreateCardDto createCardDto);
 
