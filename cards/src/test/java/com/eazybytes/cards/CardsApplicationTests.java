@@ -45,6 +45,7 @@ class CardsApplicationTests {
         void setup() {
                 this.cardRepository.deleteAll();
 
+                // Create test Card
                 CreateCardDto newCard = new CreateCardDto();
                 newCard.setMobileNumber(this.mockMobileNumber);
                 this.cardService.createCard(newCard);
@@ -159,6 +160,13 @@ class CardsApplicationTests {
 
         /**
          * =================================================================================================
+         * PUT Endpoints
+         * =================================================================================================
+         */
+        // TODO: create update test endpoint
+
+        /**
+         * =================================================================================================
          * DELETE Endpoints
          * =================================================================================================
          */
@@ -192,11 +200,5 @@ class CardsApplicationTests {
                                 .andExpect(jsonPath(this.statusCodeField).value(statusCode))
                                 .andExpect(jsonPath(this.statusMessageField).value(statusMessage));
         }
-
-        /**
-         * =================================================================================================
-         * PUT Endpoints
-         * =================================================================================================
-         */
 
 }

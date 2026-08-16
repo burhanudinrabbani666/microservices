@@ -15,13 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.eazybytes.cards.dto.CardDto;
 import com.eazybytes.cards.dto.CardSuccessResponseDto;
 import com.eazybytes.cards.dto.CreateCardDto;
+import com.eazybytes.cards.dto.ErrorResponseDto;
 import com.eazybytes.cards.entity.Cards;
 import com.eazybytes.cards.service.ICardService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Cards", description = "CRUD REST APIs in EazyBank to CREATE, UPDATE, FETCH AND DELETE card details")
 @RestController()
 @RequestMapping(path = "/api/cards")
 @RequiredArgsConstructor
@@ -35,6 +43,12 @@ public class CardController {
          * @param mobiileNumber
          * @return
          */
+        @Operation(summary = "Get Card ", description = "REST API to fetch card details based on a mobile number")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "200", description = "OK"),
+                        @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+                        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+        })
         @GetMapping(path = "/{mobileNumber}")
         public ResponseEntity<CardSuccessResponseDto> getCardByMobileNumber(
                         @PathVariable @Valid @Pattern(regexp = "(^$|[0-9]{10})", message = "Account number must be 10 digits") String mobileNumber) {
@@ -50,9 +64,16 @@ public class CardController {
 
         /**
          * 
-         * @param mobileNumber
+         * @param createCardDto
          * @return
          */
+        @Operation(summary = "Create Card", description = "REST API to create new Card inside EazyBank")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "201", description = "CREATED"),
+                        @ApiResponse(responseCode = "404", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+                        @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+                        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+        })
         @PostMapping
         public ResponseEntity<CardSuccessResponseDto> createCard(@RequestBody @Valid CreateCardDto createCardDto) {
                 Cards card = this.cardService.createCard(createCardDto);
@@ -65,6 +86,20 @@ public class CardController {
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
         }
 
+        /**
+         * 
+         * @param id
+         * @param cardDto
+         * @return
+         */
+        @Operation(summary = "Update Card", description = "REST API to update card details based on a card number")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "204", description = "NO CONTENT"),
+                        @ApiResponse(responseCode = "400", description = "BAD REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+                        @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+                        @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+                        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+        })
         @PutMapping(path = "/{id}")
         public ResponseEntity<String> updatedCard(@PathVariable @Valid Long id, @RequestBody @Valid CardDto cardDto) {
                 this.cardService.updateCard(id, cardDto);
@@ -76,6 +111,12 @@ public class CardController {
          * @param mobileNumber
          * @return
          */
+        @Operation(summary = "Delete Card", description = "REST API to delete Card details based on a mobile number")
+        @ApiResponses({
+                        @ApiResponse(responseCode = "204", description = "NO CONTENT"),
+                        @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+                        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+        })
         @DeleteMapping(path = "/{mobileNumber}")
         public ResponseEntity<String> deleteCardByMobileNumber(@PathVariable String mobileNumber) {
                 this.cardService.deleteCardByMobileNumber(mobileNumber);

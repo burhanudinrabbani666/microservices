@@ -8,6 +8,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -22,19 +23,21 @@ import lombok.ToString;
 @EntityListeners(AuditingEntityListener.class)
 public class BaseEntity {
 
-    @CreatedDate
-    @Column(updatable = false, name = "created_at")
-    private LocalDateTime createdAt;
+        @CreatedDate
+        @Column(updatable = false, name = "created_at")
+        private LocalDateTime createdAt;
 
-    @CreatedBy
-    @Column(updatable = false, name = "created_by")
-    private String createdBy;
+        @CreatedBy
+        @Column(updatable = false, name = "created_by")
+        @Schema(description = "name of resposibility of creating EazyBank Card", example = "user1234")
+        private String createdBy;
 
-    @LastModifiedDate
-    @Column(insertable = false, name = "updated_at")
-    private LocalDateTime updatedAt;
+        @LastModifiedDate
+        @Column(insertable = false, name = "updated_at")
+        private LocalDateTime updatedAt;
 
-    @LastModifiedBy
-    @Column(insertable = false, name = "updated_by")
-    private String updatedBy;
+        @LastModifiedBy
+        @Column(insertable = false, name = "updated_by")
+        @Schema(description = "name of resposibility of updated EazyBank Card", example = "user1234")
+        private String updatedBy;
 }
