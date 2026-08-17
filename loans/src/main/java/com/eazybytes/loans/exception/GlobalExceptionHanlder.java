@@ -40,7 +40,7 @@ public class GlobalExceptionHanlder extends ResponseEntityExceptionHandler {
                 errorResponseDTO.setApiPath(request.getDescription(false));
                 errorResponseDTO.setStatusCode(String.valueOf(HttpStatus.BAD_REQUEST.value()));
                 errorResponseDTO.setStatusMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
-                errorResponseDTO.setErrors(validationErrorList);
+                errorResponseDTO.setErrors(validationErrors);
                 errorResponseDTO.setErrorTime(LocalDateTime.now());
 
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponseDTO);
