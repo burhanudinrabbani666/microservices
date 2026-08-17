@@ -14,5 +14,5 @@ import lombok.ToString;
 @NoArgsConstructor
 @Schema(name = "Loans Success Response", description = "Schema to hold Success response information")
 public class LoansSuccessResponseDto extends ResponseDto {
-        private Loans loans;
+        private Loans data;
 }

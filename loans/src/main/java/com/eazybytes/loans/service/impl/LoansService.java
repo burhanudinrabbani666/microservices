@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.eazybytes.loans.constants.LoansConstants;
 import com.eazybytes.loans.dto.LoansDto;
 import com.eazybytes.loans.entity.Loans;
+import com.eazybytes.loans.exception.LoanAlreadyExistsException;
+import com.eazybytes.loans.exception.ResourceNotFoundException;
 import com.eazybytes.loans.mapper.LoansMapper;
 import com.eazybytes.loans.repositoy.LoansRepository;
 import com.eazybytes.loans.service.ILoansService;
@@ -34,7 +36,7 @@ public class LoansService implements ILoansService {
         @Override
         public Loans getLoanByMobileNumber(String mobileNumber) {
                 Optional<Loans> optionalLoans = this.loansRepository.findByMobileNumber(mobileNumber);
-                Loans loans = this.checkIfLoansIsPresent(optionalLoans);
+                Loans loans = this.checkIfLoansIsPresent(optionalLoans, "mobileNumber", mobileNumber);
                 return loans;
         }
 
@@ -44,7 +46,7 @@ public class LoansService implements ILoansService {
                 this.checkLoansIsAlreadyCreated(existLoans);
 
                 Optional<Loans> optionalLoans = this.loansRepository.findById(id);
-                Loans loans = this.checkIfLoansIsPresent(optionalLoans);
+                Loans loans = this.checkIfLoansIsPresent(optionalLoans, "loansId", id.toString());
 
                 LoansMapper.mapToLoans(loansDto, loans);
                 this.loansRepository.save(loans);
@@ -53,7 +55,7 @@ public class LoansService implements ILoansService {
         @Override
         public void deleteLoanByMobileNumber(String mobileNumber) {
                 Optional<Loans> optionalLoans = this.loansRepository.findByMobileNumber(mobileNumber);
-                Loans loans = this.checkIfLoansIsPresent(optionalLoans);
+                Loans loans = this.checkIfLoansIsPresent(optionalLoans, "mobileNumber", mobileNumber);
                 this.loansRepository.deleteById(loans.getLoanId());
         }
 
@@ -80,12 +82,12 @@ public class LoansService implements ILoansService {
          */
         private void checkLoansIsAlreadyCreated(Optional<Loans> optionalLoans) {
                 if (optionalLoans.isPresent()) {
-                        throw new RuntimeException();
+                        throw new LoanAlreadyExistsException("Loans with already exist");
                 }
         }
 
-        private Loans checkIfLoansIsPresent(Optional<Loans> optionalLoans) {
-                return optionalLoans.orElseThrow(() -> new RuntimeException(""));
+        private Loans checkIfLoansIsPresent(Optional<Loans> optionalLoans, String fieldName, String filedValue) {
+                return optionalLoans.orElseThrow(() -> new ResourceNotFoundException("Loans", fieldName, filedValue));
         }
 
 }
